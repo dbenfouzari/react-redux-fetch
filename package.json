@@ -6,8 +6,19 @@
   "repository": "https://github.com/dbenfouzari/react-redux-fetch",
   "author": "Donovan BENFOUZARI <d.benfouzari@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "dev": "tsc -w"
+  },
   "devDependencies": {
+    "@types/react": "^16.7.21",
+    "@types/redux": "^3.6.0",
+    "react": "^16.7.0",
+    "redux": "^4.0.1",
     "tslint": "^5.12.1",
     "typescript": "^3.2.4"
+  },
+  "peerDependencies": {
+    "react": "^16.7",
+    "redux": "^4.0.1"
   }
 }
