@@ -1,0 +1,9 @@
+{
+  "name": "react-redux-fetch",
+  "version": "0.0.1",
+  "description": "This project aims to be easy as fuck",
+  "main": "lib/index.js",
+  "repository": "https://github.com/dbenfouzari/react-redux-fetch",
+  "author": "Donovan BENFOUZARI <d.benfouzari@gmail.com>",
+  "license": "MIT"
+}
