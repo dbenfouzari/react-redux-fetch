@@ -1,9 +1,12 @@
 import mockAxios from "axios";
+import { schema, Schema } from "normalizr";
 import { Dispatch } from "redux";
 import ApiClient from "../api-client";
 
 describe("API Client", () => {
-  const client = ApiClient({ collectionUrl: "http://www.example.com/articles" });
+  const articleSchema = new schema.Entity("articles" );
+
+  const client = ApiClient({ collectionUrl: "http://www.example.com/articles", entitySchema: articleSchema });
 
   describe("getEntity", () => {
     it("fetches data and returns correct data", async () => {
@@ -32,8 +35,15 @@ describe("API Client", () => {
       expect(dispatch).toHaveBeenCalledWith({
         payload: {
           data: {
-            id: 1,
-            title: "First article",
+            entities: {
+              articles: {
+                1: {
+                  id: 1,
+                  title: "First article",
+                },
+              },
+            },
+            result: 1,
           },
           status: 200,
           statusText: "OK",
@@ -41,8 +51,10 @@ describe("API Client", () => {
         type: "@@rrf/FETCH_SUCCESS",
       });
       expect(result).toEqual({
-        id: 1,
-        title: "First article",
+        1: {
+          id: 1,
+          title: "First article",
+        },
       });
     });
 
@@ -94,19 +106,28 @@ describe("API Client", () => {
       });
       expect(dispatch).toHaveBeenCalledWith({
         payload: {
-          data: [{
-            id: 1,
-            title: "First article",
-          }],
+          data: {
+            entities: {
+              articles: {
+                1: {
+                  id: 1,
+                  title: "First article",
+                },
+              },
+            },
+            result: [1],
+          },
           status: 200,
           statusText: "OK",
         },
         type: "@@rrf/FETCH_SUCCESS",
       });
-      expect(result).toEqual([{
-        id: 1,
-        title: "First article",
-      }]);
+      expect(result).toEqual({
+        1: {
+          id: 1,
+          title: "First article",
+        },
+      });
     });
 
     it("dispatches an error and returns an error", async () => {

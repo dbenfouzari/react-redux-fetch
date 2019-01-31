@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import { normalize, schema } from "normalizr";
 import { Dispatch } from "redux";
 import { Actions } from "./actions";
 
@@ -6,7 +7,7 @@ type EntityId = string | number;
 
 interface ApiClientParams {
   collectionUrl: string;
-  entitySchema?: any;
+  entitySchema: schema.Entity;
 }
 
 const ApiClient = ({ collectionUrl, entitySchema }: ApiClientParams) => ({
@@ -15,8 +16,15 @@ const ApiClient = ({ collectionUrl, entitySchema }: ApiClientParams) => ({
 
     try {
       const response = await axios.get(String(entityId));
-      dispatch(Actions.fetchSuccess(response));
-      return response.data;
+
+      const normalizedData = normalize(response.data, entitySchema);
+      const result = {
+        ...response,
+        data: normalizedData,
+      };
+
+      dispatch(Actions.fetchSuccess(result));
+      return result.data.entities[entitySchema.key];
     } catch (e) {
       dispatch(Actions.fetchFailure(e));
       return e;
@@ -28,8 +36,15 @@ const ApiClient = ({ collectionUrl, entitySchema }: ApiClientParams) => ({
 
     try {
       const response = await axios.get(entityUrl);
-      dispatch(Actions.fetchSuccess(response));
-      return response.data;
+
+      const normalizedData = normalize(response.data, [entitySchema]);
+      const result = {
+        ...response,
+        data: normalizedData,
+      };
+
+      dispatch(Actions.fetchSuccess(result));
+      return result.data.entities[entitySchema.key];
     } catch (e) {
       dispatch(Actions.fetchFailure(e));
       return e;
