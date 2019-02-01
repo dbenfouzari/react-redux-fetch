@@ -1,14 +1,20 @@
 import mockAxios from "axios";
+import { schema, Schema } from "normalizr";
 import { Dispatch } from "redux";
 import ApiClient from "../api-client";
 
 describe("API Client", () => {
-  const client = ApiClient({ collectionUrl: "http://www.example.com/articles" });
+  const articleSchema = new schema.Entity("articles");
+
+  const client = ApiClient({
+    collectionUrl: "http://www.example.com/articles",
+    entitySchema: articleSchema,
+  });
 
   describe("getEntity", () => {
     it("fetches data and returns correct data", async () => {
       // setup
-      (mockAxios.get as jest.Mock).mockImplementationOnce(() => (
+      (mockAxios.get as jest.Mock).mockImplementationOnce(() =>
         Promise.resolve({
           data: {
             id: 1,
@@ -17,12 +23,14 @@ describe("API Client", () => {
           status: 200,
           statusText: "OK",
           // headers: {}
-        })
-      ));
+        }),
+      );
 
       const dispatch: Dispatch = jest.fn((f: any) => f);
 
-      const result = await client.getEntity("http://www.example.com/articles/1")(dispatch);
+      const result = await client.getEntity(
+        "http://www.example.com/articles/1",
+      )(dispatch);
       expect(dispatch).toHaveBeenCalledWith({
         payload: {
           url: "http://www.example.com/articles/1",
@@ -32,8 +40,15 @@ describe("API Client", () => {
       expect(dispatch).toHaveBeenCalledWith({
         payload: {
           data: {
-            id: 1,
-            title: "First article",
+            entities: {
+              articles: {
+                1: {
+                  id: 1,
+                  title: "First article",
+                },
+              },
+            },
+            result: 1,
           },
           status: 200,
           statusText: "OK",
@@ -41,19 +56,23 @@ describe("API Client", () => {
         type: "@@rrf/FETCH_SUCCESS",
       });
       expect(result).toEqual({
-        id: 1,
-        title: "First article",
+        1: {
+          id: 1,
+          title: "First article",
+        },
       });
     });
 
     it("dispatches an error and returns an error", async () => {
-      (mockAxios.get as jest.Mock).mockImplementationOnce(() => (
-        Promise.reject("oh oh")
-      ));
+      (mockAxios.get as jest.Mock).mockImplementationOnce(() =>
+        Promise.reject("oh oh"),
+      );
 
       const dispatch: Dispatch = jest.fn((f: any) => f);
 
-      const result = await client.getEntity("http://example.com/articles/1")(dispatch);
+      const result = await client.getEntity("http://example.com/articles/1")(
+        dispatch,
+      );
       expect(dispatch).toHaveBeenCalledWith({
         payload: {
           url: "http://example.com/articles/1",
@@ -71,21 +90,25 @@ describe("API Client", () => {
   describe("getEntityList", () => {
     it("fetches data and returns correct data", async () => {
       // setup
-      (mockAxios.get as jest.Mock).mockImplementationOnce(() => (
+      (mockAxios.get as jest.Mock).mockImplementationOnce(() =>
         Promise.resolve({
-          data: [{
-            id: 1,
-            title: "First article",
-          }],
+          data: [
+            {
+              id: 1,
+              title: "First article",
+            },
+          ],
           status: 200,
           statusText: "OK",
           // headers: {}
-        })
-      ));
+        }),
+      );
 
       const dispatch: Dispatch = jest.fn((f: any) => f);
 
-      const result = await client.getEntityList("http://example.com/articles")(dispatch);
+      const result = await client.getEntityList("http://example.com/articles")(
+        dispatch,
+      );
       expect(dispatch).toHaveBeenCalledWith({
         payload: {
           url: "http://example.com/articles",
@@ -94,29 +117,40 @@ describe("API Client", () => {
       });
       expect(dispatch).toHaveBeenCalledWith({
         payload: {
-          data: [{
-            id: 1,
-            title: "First article",
-          }],
+          data: {
+            entities: {
+              articles: {
+                1: {
+                  id: 1,
+                  title: "First article",
+                },
+              },
+            },
+            result: [1],
+          },
           status: 200,
           statusText: "OK",
         },
         type: "@@rrf/FETCH_SUCCESS",
       });
-      expect(result).toEqual([{
-        id: 1,
-        title: "First article",
-      }]);
+      expect(result).toEqual({
+        1: {
+          id: 1,
+          title: "First article",
+        },
+      });
     });
 
     it("dispatches an error and returns an error", async () => {
-      (mockAxios.get as jest.Mock).mockImplementationOnce(() => (
-        Promise.reject("oh oh")
-      ));
+      (mockAxios.get as jest.Mock).mockImplementationOnce(() =>
+        Promise.reject("oh oh"),
+      );
 
       const dispatch: Dispatch = jest.fn((f: any) => f);
 
-      const result = await client.getEntityList("http://example.com/articles")(dispatch);
+      const result = await client.getEntityList("http://example.com/articles")(
+        dispatch,
+      );
       expect(dispatch).toHaveBeenCalledWith({
         payload: {
           url: "http://example.com/articles",

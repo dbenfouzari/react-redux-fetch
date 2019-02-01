@@ -1,4 +1,4 @@
-import {createAction} from "../action-helpers";
+import { createAction } from "../action-helpers";
 import * as fromActions from "../actions";
 import reducers from "../reducers";
 

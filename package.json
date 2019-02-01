@@ -1,6 +1,6 @@
 {
   "name": "react-redux-fetch",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "This project aims to be easy as fuck",
   "main": "lib/index.js",
   "repository": "https://github.com/dbenfouzari/react-redux-fetch",
@@ -8,13 +8,23 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsc -w",
-    "test": "jest"
+    "lint": "tslint 'src/**/*.{ts,tsx}'",
+    "test": "jest",
+    "prettier:check": "prettier-tslint check 'src/**/*.ts'",
+    "prettier:fix": "prettier-tslint fix 'src/**/*.ts'"
+  },
+  "dependencies": {
+    "@types/axios": "^0.14.0",
+    "axios": "^0.18.0",
+    "normalizr": "^3.3.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.13",
     "@types/react": "^16.7.21",
     "@types/redux": "^3.6.0",
     "jest": "^24.0.0",
+    "prettier": "1.16.3",
+    "prettier-tslint": "^0.4.2",
     "react": "^16.7.0",
     "redux": "^4.0.1",
     "ts-jest": "^23.10.5",
@@ -36,8 +46,11 @@
     },
     "testRegex": "(/__tests__/.*|(.|/)(test|spec)).tsx?$"
   },
-  "dependencies": {
-    "@types/axios": "^0.14.0",
-    "axios": "^0.18.0"
+  "prettier": {
+    "trailingComma": "all",
+    "tabWidth": 2,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": false
   }
 }
