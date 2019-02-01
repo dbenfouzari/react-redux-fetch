@@ -40,4 +40,4 @@ jobs:
       # run tests!
       - run: yarn test --coverage
       - codecov/upload:
-          file: "coverage"
+          file: "coverage/coverage-final.json"
