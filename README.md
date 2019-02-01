@@ -14,6 +14,10 @@ yarn add react-redux-fetch
 You must use it with :
 
 ```js
+import {  }
+```
+
+```js
 import * as fetchActions from 'react-redux-fetch/actions';
 
 dispatch({
