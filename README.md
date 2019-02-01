@@ -1,5 +1,8 @@
 # react-redux-fetch
 
+
+[![codecov](https://codecov.io/gh/dbenfouzari/react-redux-fetch/branch/master/graph/badge.svg)](https://codecov.io/gh/dbenfouzari/react-redux-fetch)
+
 ## Installation
 
 ```bash
