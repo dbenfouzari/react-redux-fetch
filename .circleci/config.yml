@@ -1,9 +1,12 @@
-.circleci/
 # Javascript Node CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
-version: 2
+version: 2.1
+
+orbs:
+  codecov: codecov/codecov@1.0.3
+
 jobs:
   build:
     docker:
@@ -35,4 +38,6 @@ jobs:
           key: v1-dependencies-{{ checksum "yarn.lock" }}
 
       # run tests!
-      - run: yarn test
+      - run: yarn test --coverage
+      - codecov/upload:
+          file: "coverage"
