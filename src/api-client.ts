@@ -10,7 +10,10 @@ interface ApiClientParams {
   entitySchema: schema.Entity;
 }
 
-const transformData = (response: AxiosResponse, entitySchema: schema.Entity | schema.Entity[]) => {
+const transformData = (
+  response: AxiosResponse,
+  entitySchema: schema.Entity | schema.Entity[],
+) => {
   const normalizedData = normalize(response.data, entitySchema);
   return {
     ...response,
@@ -19,7 +22,9 @@ const transformData = (response: AxiosResponse, entitySchema: schema.Entity | sc
 };
 
 const ApiClient = ({ collectionUrl, entitySchema }: ApiClientParams) => ({
-  getEntity: (entityId: EntityId) => async (dispatch: Dispatch): Promise<AxiosResponse> => {
+  getEntity: (entityId: EntityId) => async (
+    dispatch: Dispatch,
+  ): Promise<AxiosResponse> => {
     dispatch(Actions.fetchRequest({ url: entityId }));
 
     try {
@@ -34,7 +39,9 @@ const ApiClient = ({ collectionUrl, entitySchema }: ApiClientParams) => ({
     }
   },
 
-  getEntityList: (entityUrl: string) => async (dispatch: Dispatch): Promise<AxiosResponse> => {
+  getEntityList: (entityUrl: string) => async (
+    dispatch: Dispatch,
+  ): Promise<AxiosResponse> => {
     dispatch(Actions.fetchRequest({ url: entityUrl }));
 
     try {
